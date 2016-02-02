@@ -5,7 +5,7 @@ using namespace std;
 class Win : public Gtk::Window
 {
 public:
-	Win() {
+	Win() : b("ok or noot"){
 		add(b);
 		b.signal_clicked().connect(sigc::mem_fun(*this, &Win::on_click));
 		show_all_children();
@@ -19,7 +19,8 @@ protected:
 	void on_click() {
 		w = new Win();
 		cout << "inside" << endl;
-		w->signal_hide().connect(sigc::mem_fun(*this, &Win::on_close));
+		w->show();
+//		w->signal_hide().connect(sigc::mem_fun(*this, &Win::on_close));
 	}
 	void on_close() {
 		delete w;

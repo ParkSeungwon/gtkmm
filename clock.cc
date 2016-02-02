@@ -1,7 +1,11 @@
-#ifndef GTKMM_EXAMPLE_CLOCK_H
-#define GTKMM_EXAMPLE_CLOCK_H
-
-#include <gtkmm/drawingarea.h>
+#include <ctime>
+#include <cmath>
+#include <gtkmm.h>
+//#include <gtkmm/drawingarea.h>
+//#include <cairomm/context.h>
+//#include <glibmm/main.h>
+//#include <gtkmm/application.h>
+//#include <gtkmm/window.h>
 
 class Clock : public Gtk::DrawingArea
 {
@@ -20,12 +24,7 @@ protected:
 
 };
 
-#endif // GTKMM_EXAMPLE_CLOCK_H
 
-#include <ctime>
-#include <cmath>
-#include <cairomm/context.h>
-#include <glibmm/main.h>
 
 Clock::Clock()
 : m_radius(0.42), m_line_width(0.05)
@@ -145,8 +144,6 @@ bool Clock::on_timeout()
 }
 
 
-#include <gtkmm/application.h>
-#include <gtkmm/window.h>
 
 int main(int argc, char** argv)
 {

@@ -1,7 +1,5 @@
-#ifndef GTKMM_EXAMPLE_RANGEWIDGETS_H
-#define GTKMM_EXAMPLE_RANGEWIDGETS_H
-
 #include <gtkmm.h>
+#include <iostream>
 
 class ExampleWindow : public Gtk::Window
 {
@@ -53,10 +51,7 @@ protected:
   Gtk::Button m_Button_Quit;
 };
 
-#endif //GTKMM_EXAMPLE_RANGEWIDGETS_H
 
-
-#include <iostream>
 
 ExampleWindow::ExampleWindow()
 :
@@ -231,8 +226,6 @@ void ExampleWindow::on_button_quit()
   hide();
 }
 
-
-#include <gtkmm/application.h>
 
 int main(int argc, char *argv[])
 {
