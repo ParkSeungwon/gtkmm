@@ -2,12 +2,13 @@
 #include <iostream>
 #include "teamsetup.h"
 using namespace std;
+using namespace Gtk;
 
 TeamSetup::TeamSetup(int c) : bt1("Start game")
 {
 	add(vbox1);
-	hboxes = new Gtk::HBox[c];
-	comboboxes = new Gtk::ComboBoxText[c * 3];
+	hboxes = new HBox[c];
+	comboboxes = new ComboBoxText[c * 3];
 	string s;
 	for(int i=0; i<c; i++) {
 		vbox1.pack_start(hboxes[i]);
@@ -51,13 +52,15 @@ TeamSetup::~TeamSetup()
 
 void TeamSetup::on_click()
 {
-	ts = new TeamSetup(8);
+	ts = make_shared<TeamSetup>(8);
+	ts->show();
 	cout << "inside on_click" << endl;
+	//show_all_children();
 }
 
 int main(int argc, char *argv[])
 {
-  auto app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
+  auto app = Application::create(argc, argv, "");
 
   TeamSetup window(4);
 

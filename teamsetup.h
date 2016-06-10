@@ -1,5 +1,6 @@
 #pragma once
 #include <gtkmm.h>
+#include<memory>
 
 class TeamSetup : public Gtk::Window
 {
@@ -15,5 +16,5 @@ protected:
 	void on_click();
 	
 private:
-	TeamSetup* ts;
+	std::shared_ptr<TeamSetup> ts;
 };

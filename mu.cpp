@@ -17,7 +17,7 @@ protected:
 	Gtk::Button b;
 	Win *w;
 	void on_click() {
-		w = new Win();
+		w = Gtk::manage(new Win());
 		cout << "inside" << endl;
 		w->show();
 //		w->signal_hide().connect(sigc::mem_fun(*this, &Win::on_close));

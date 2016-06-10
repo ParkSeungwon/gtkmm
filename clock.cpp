@@ -147,7 +147,7 @@ bool Clock::on_timeout()
 
 int main(int argc, char** argv)
 {
-   auto app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
+   auto app = Gtk::Application::create(argc, argv, "");
 
    Gtk::Window win;
    win.set_title("Cairomm Clock");

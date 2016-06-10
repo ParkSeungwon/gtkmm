@@ -1,19 +1,24 @@
-CFLAG = -g -std=c++11 -fmax-errors=3
+CFLAG = -g -std=c++11 -fmax-errors=3 -pthread
 GTKCFLAG = $(shell pkg-config gtkmm-3.0 --cflags)
 GTKLIB = $(shell pkg-config gtkmm-3.0 --libs)
 CC = g++
 SRC = $(wildcard *.cc)
-EXE = $(patsubst %.cc, %, $(SRC))
-#POBJ = $(wildcard ../*.o)
+CPP = $(wildcard *.cpp)
+GTK = $(wildcard *.c++)
+EXE = $(patsubst %.cpp, %.x, $(CPP))
+OBJ = $(patsubst %.cc, %.o, $(SRC))
+GOBJ = $(patsubst %.c++, %.o, $(GTK))
 
-all : $(EXE)
+all : $(OBJ) $(GOBJ) $(EXE) 
 
-#./show
+%.x : %.cpp $(OBJ)
+	$(CC) $< -o $@ $(OBJ) $(CFLAG) $(GTKCFLAG) $(GTKLIB)
 
-% : %.cc 
-	$(CC) $< $(GTKCFLAG) $(GTKLIB) $(CFLAG) -o $@
-team : teamsetup.cc
-	$(CC) teamsetup.cc $(GTKCFLAG) $(GTKLIB) $(CFLAG) -o $@
-	
+%.o : %.cc %.h
+	$(CC) $< -c $(CFLAG)
+
+%.o : %.c++ %.h
+	$(CC) $< -c $(CFLAG) -$(GTKCFLAG)
+
 clean :
-	rm *.o
+	rm *.o *.x
