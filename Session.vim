@@ -8,10 +8,11 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +0 ~/Programming/gtkmm/simple.cpp
-badd +0 ~/Programming/gtkmm/Makefile
+badd +1 ~/Programming/gtkmm/simple.cpp
+badd +1 ~/Programming/gtkmm/Makefile
+badd +0 ~/Programming/gtkmm/minesweeper.cpp
 silent! argdel *
-edit ~/Programming/gtkmm/simple.cpp
+edit ~/Programming/gtkmm/minesweeper.cpp
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -27,11 +28,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 38 - ((37 * winheight(0) + 19) / 39)
+let s:l = 1 - ((0 * winheight(0) + 19) / 38)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-38
+1
 normal! 0
 tabedit ~/Programming/gtkmm/Makefile
 set splitbelow splitright
@@ -55,7 +56,7 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabnext 2
+tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif
