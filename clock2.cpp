@@ -21,6 +21,8 @@ protected:
 
   double m_radius;
   double m_line_width;
+  double minutes, hours, seconds;
+
 
 };
 
@@ -29,7 +31,7 @@ protected:
 Clock::Clock()
 : m_radius(0.42), m_line_width(0.05)
 {
-  Glib::signal_timeout().connect( bind(&Clock::on_timeout, this), 1000 );
+  Glib::signal_timeout().connect( sigc::mem_fun(*this, &Clock::on_timeout), 1000 );
 }
 
 Clock::~Clock()
@@ -90,9 +92,9 @@ bool Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
   struct tm * timeinfo = localtime (&rawtime);
 
   // compute the angles of the indicators of our clock
-  double minutes = timeinfo->tm_min * M_PI / 30;
-  double hours = timeinfo->tm_hour * M_PI / 6;
-  double seconds= timeinfo->tm_sec * M_PI / 30;
+  minutes = timeinfo->tm_min * M_PI / 30;
+  hours = timeinfo->tm_hour * M_PI / 6;
+  seconds= timeinfo->tm_sec * M_PI / 30;
 
   cr->save();
   cr->set_line_cap(Cairo::LINE_CAP_ROUND);
