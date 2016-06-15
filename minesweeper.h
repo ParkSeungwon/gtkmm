@@ -12,20 +12,6 @@ protected:
 	bool on_button_press_event(GdkEventButton* e);
 };
 
-class Clock : public Gtk::Window
-{
-public:
-	Clock();
-	~Clock();
-	void set_label(string s);
-	bool on = true;
-	int time = 0;
-
-protected:
-	std::thread th;
-	Gtk::Label label;
-	bool on_timeout();
-};
 
 class Win : public Gtk::Window, public Matrix<char>
 {
@@ -37,11 +23,14 @@ protected:
 	Gtk::Grid grid;
 	MButton* btn;
 	void on_click(int);
-	Clock clock;
 
 private:
+	std::thread th;
+	bool on = true;
+	int time = 0;
 	int bomb;
 
+	bool time_pass();
 	void message(const char* str);
 	int mine_count(int x, int y);
 	void dig(int n);

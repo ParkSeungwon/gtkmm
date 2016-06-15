@@ -24,8 +24,7 @@ bool MButton::on_button_press_event(GdkEventButton* e)
 	return true;
 }
 
-Win::Win(int w, int h) : Matrix<char>(w, h) {
-	clock.show();
+Win::Win(int w, int h) : Matrix<char>(w, h), th(&Win::time_pass, this) {
 	add(grid);
 	grid.set_row_homogeneous(true);
 	grid.set_column_homogeneous(true);
@@ -47,19 +46,8 @@ Win::Win(int w, int h) : Matrix<char>(w, h) {
 }
 
 Win::~Win() { //virtual->on=false ...
-	delete [] btn;
-}
-
-Clock::Clock() : th(&Clock::on_timeout, this)
-{
-	add(label);
-	//Glib::signal_timeout().connect(bind(&Clock::on_timeout, *this), 1000);
-	show_all_children();
-}
-	
-Clock::~Clock()
-{
 	on = false;
+	delete [] btn;
 	th.join();
 }
 
@@ -67,19 +55,16 @@ void Win::on_click(int n) {
 	if(arr[n] == 0) domino(n%width, n/width);
 	else if(arr[n] == '*') {
 		btn[n].set_label("*");
-		for(int i=0; i<width*height; i++) {
-			if(arr[i] == 42) btn[i].set_label("*");
-			else btn[i].set_label(to_string(arr[i]));
-		}
+		for(int i=0; i<width*height; i++) if(arr[i] == 42) btn[i].set_label("*");
 		message("Boom!!!");
 		hide();
 	} else dig(n);
 }
 
-bool Clock::on_timeout() {//start time static으로 해야 
+bool Win::time_pass() {//start time static으로 해야 
 	while(on) {
 		this_thread::sleep_for(chrono::seconds(1));
-		label.set_text(to_string(++time) + " seconds passed");
+		cout << ++time << " seconds passed\r" << flush;
 	}
 	return true;
 }
@@ -89,7 +74,7 @@ void Win::message(const char* str) {
 	int x, y;
 	get_position(x, y);
 	dialog.move(x-170, y);
-	clock.on = false;
+	on = false;
 	dialog.run();
 }
 
@@ -113,11 +98,11 @@ void Win::dig(int n) {
 	if(btn[n].get_label() != to_string(arr[n])) {
 		btn[n].set_label(to_string(arr[n]));
 		dug++;
-	}
-	if(dug == width*height-bomb) {
-		message("Complete!!!");
-		write_score();
-		show_bestscore();
+		if(dug == width*height-bomb) {
+			message("Complete!!!");
+			write_score();
+			show_bestscore();
+		}
 	}
 }
 
@@ -125,27 +110,19 @@ void Win::show_bestscore()
 {
 	ifstream file("bestscore.txt");
 	if(file.is_open()) {
-		string s;
 		vector<int> v;
 		int n[3];
 		while(file >> n[0] >> n[1] >> n[2])
 			if(n[0] == width && n[1] == height) v.push_back(n[2]);
 
 		sort(v.begin(), v.end());
-		s = "your time is " + to_string(clock.time);
-		s += "\nbest scores of " + to_string(width) + 'X' + to_string(height) + '\n';
+		cout << "\nbest scores of " << width << 'X' << height << endl;
 		int i=1;
 		for(auto& a : v) {
-			s += to_string(i++) + ". " + to_string(a) + '\n';
+			cout << i++ << ". " << a << endl;
 			if(i>10) break;
 		}
-		clock.set_label(s);
 	}
-}
-
-void Clock::set_label(string s)
-{
-	label.set_text(s);
 }
 
 void Win::write_score() 
