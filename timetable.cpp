@@ -1,5 +1,4 @@
 #include"timetable.h"
-#include<iostream>
 #include<fstream>
 #include<chrono>
 #include<ctime>
@@ -7,8 +6,8 @@
 using namespace std;
 using namespace chrono;
 using namespace Gtk;
-
-MButton::MButton(const TimeTable& tt)
+//Image MButton::image("alarm.png");
+MButton::MButton(const TimeTable& tt) : image("alarm.png")
 {
 	start = tt.start;
 	end = tt.end;
@@ -21,6 +20,8 @@ MButton::MButton(const TimeTable& tt)
 	signal_clicked().connect(bind(&MButton::on_click, this));
 	set_comment();
 	set_label();
+	add(vbox);
+	vbox.pack_end(label);
 }
 
 void MButton::set_label()
@@ -31,9 +32,13 @@ void MButton::set_label()
 		s[pos] = '\n';
 	}
 	auto a = time();
-	if(a.first == day && a.second >start && a.second < end) s = "----\n" + s;
+	if(a.first == day && a.second + 100 >start && a.second < end) {
+		vbox.pack_start(image, PACK_SHRINK);
+		//s = "----\n" + s;
+		//set_image("bomber_hb.png");
+	}
 	if(popup.contents.size() > 1) s = "*\n" + s;
-	Button::set_label(s);
+	label.set_label(s);
 }
 
 void MButton::set_comment()
@@ -52,11 +57,11 @@ void MButton::set_comment()
 		str = "";
 	}
 	popup.prepare(day, start, last);
+	popup.set_title(professor + '(' + classroom + ')');
 }
 
 void MButton::on_click()
 {
-	cout << professor << ' ' << classroom << endl;
 	popup.show();
 }
 
@@ -129,12 +134,13 @@ Win::Win(const TimeTable* tt)
 		hbox.pack_start(vbox[i], false, false);//PACK_SHRINK);
 	}
 	for(int i=0; i<END-START; i++) {
-		vbox[0].pack_start(frame[i]);
+		vbox[0].pack_start(frame[i], PACK_SHRINK);
 		frame[i].add(label[i]);
+		frame[i].set_size_request(50, RATIO * 100);
 		int j = (i + START) % 12;
 		if(j == 0) label[i].set_label("12:00~\n1:00");
 		else label[i].set_label(to_string(j) + ":00 ~\n"+to_string(j+1) + ":00");
-		label[i].set_size_request(50, RATIO * 98);//frame need 2 pixel more
+//		label[i].set_size_request(50, RATIO * 98);//frame need 2 pixel more
 	}
 	while(tt->day != 0) {
 		vbox[tt->day].pack(*tt);

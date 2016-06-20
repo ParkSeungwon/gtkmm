@@ -56,6 +56,9 @@ protected:
 	int start, end, day;
 	std::string professor, subject, classroom;
 	void on_click();
+	Gtk::VBox vbox;
+	Gtk::Label label;
+	Gtk::Image image;
 	CommentPopup popup;
 };
 
