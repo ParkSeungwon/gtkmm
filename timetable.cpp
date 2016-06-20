@@ -1,13 +1,15 @@
-#include"timetable.h"
 #include<fstream>
 #include<chrono>
 #include<ctime>
 #include<unordered_map>
+#include"analogue_clock_01.xpm"
+#include"timetable.h"
 using namespace std;
 using namespace chrono;
 using namespace Gtk;
 //Image MButton::image("alarm.png");
-MButton::MButton(const TimeTable& tt) : image("alarm.png")
+MButton::MButton(const TimeTable& tt) 
+	: image(Gdk::Pixbuf::create_from_xpm_data(analogue_clock_01_xpm))
 {
 	start = tt.start;
 	end = tt.end;
