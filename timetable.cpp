@@ -1,8 +1,11 @@
 #include"timetable.h"
 #include<iostream>
 #include<fstream>
-#include<algorithm>
+#include<chrono>
+#include<ctime>
+#include<unordered_map>
 using namespace std;
+using namespace chrono;
 using namespace Gtk;
 
 MButton::MButton(const TimeTable& tt)
@@ -14,20 +17,27 @@ MButton::MButton(const TimeTable& tt)
 	subject = tt.subject;
 	classroom = tt.classroom;
 	set_size_request(50, RATIO*(end - start));
-	set_label(subject);
-	for(int pos=0; pos != string::npos; ) {//get_width() > 50) {
-		pos = subject.find(' ', pos);
-		subject[pos] = '\n';
-		set_label(subject);
-	}
 	//set_line_wrap(true);
 	signal_clicked().connect(bind(&MButton::on_click, this));
 	set_comment();
-	if(popup.contents != "") set_label("*\n" + get_label());
+	set_label();
+}
+
+void MButton::set_label()
+{//process subject label
+	string s = subject;
+	for(int pos=0; pos != string::npos; ) {//get_width() > 50) {
+		pos = s.find(' ', pos);
+		s[pos] = '\n';
+	}
+	auto a = time();
+	if(a.first == day && a.second >start && a.second < end) s = "----\n" + s;
+	if(popup.contents.size() > 1) s = "*\n" + s;
+	Button::set_label(s);
 }
 
 void MButton::set_comment()
-{
+{//read notices
 	ifstream f("note.txt");
 	int d, s, n;
 	string str, last, tmp;
@@ -36,7 +46,7 @@ void MButton::set_comment()
 			getline(f, tmp);
 			str += tmp + '\n';
 		}
-		f >> tmp;
+		getline(f, tmp);
 		str += tmp;
 		if(d == day && s == start) last = str;
 		str = "";
@@ -99,9 +109,20 @@ void CommentPopup::on_ok_clicked()
 	hide();
 }
 
+pair<int, int> MButton::time() {
+	auto now = system_clock::now();
+	auto tp = system_clock::to_time_t(now);
+	string t = ctime(&tp);
+	unordered_map<string, int> days {
+		{"Mon", 1}, {"Tue", 2}, {"Wed", 3}, {"Thu", 4}, {"Fri", 5}, {"Sat", 6},
+		{"Sun", 7}
+	};
+	return {days[t.substr(0, 3)], stoi(t.substr(11, 5).erase(2, 1))};
+}
 
 Win::Win(const TimeTable* tt)
 {
+	set_title("강의 시간표");
 	add(hbox);
 	for(int i=0; i<6; i++) {
 		vbox[i].set_size_request(50);

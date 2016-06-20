@@ -49,8 +49,10 @@ public:
 	MButton(const TimeTable& tt);
 	int get_end() {return end;}
 	void set_comment();
+	void set_label();
 
 protected:
+	std::pair<int,int> time();
 	int start, end, day;
 	std::string professor, subject, classroom;
 	void on_click();
