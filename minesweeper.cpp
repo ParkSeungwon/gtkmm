@@ -18,7 +18,7 @@ bool MButton::on_button_press_event(GdkEventButton* e)
 {
 	if(e->type == GDK_BUTTON_PRESS && e->button == 3) {
 		if(get_label() == "v") set_label("");
-		else set_label("v");
+		else if (get_label() == "") set_label("v");
 	} else if(get_label()!="v" && e->type==GDK_BUTTON_PRESS && e->button==1) 
 		clicked();
 	return true;
@@ -48,6 +48,7 @@ Win::Win(int w, int h) : Matrix<char>(w, h), th(&Win::time_pass, this) {
 Win::~Win() { //virtual->on=false ...
 	on = false;
 	delete [] btn;
+	show_bestscore();
 	th.join();
 }
 
@@ -97,11 +98,11 @@ void Win::dig(int n) {
 	static int dug = 0;
 	if(btn[n].get_label() != to_string(arr[n])) {
 		btn[n].set_label(to_string(arr[n]));
+		btn[n].set_sensitive(false);
 		dug++;
 		if(dug == width*height-bomb) {
 			message("Complete!!!");
 			write_score();
-			show_bestscore();
 		}
 	}
 }
