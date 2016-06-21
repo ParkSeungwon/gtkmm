@@ -73,12 +73,12 @@ void MVBox::pack(const TimeTable& mb)
 	if(buttons.size() == 0) gab = mb.start - START*100;
 	else gab = mb.start - buttons.back()->get_end();
 	if(gab != 0) {
-		auto a = make_shared<Frame>();
+		auto a = manage(new Frame());
 		a->set_size_request(50, RATIO * gab);
 		frames.push_back(a);
 		pack_start(*a, PACK_SHRINK);
 	}
-	auto a = make_shared<MButton>(mb);
+	auto a = manage(new MButton(mb));
 	pack_start(*a, PACK_SHRINK);
 	buttons.push_back(a);
 }

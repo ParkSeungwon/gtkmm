@@ -68,8 +68,8 @@ public:
 	void pack(const TimeTable& mb);
 	
 protected:
-	std::vector<std::shared_ptr<MButton>> buttons;
-	std::vector<std::shared_ptr<Gtk::Frame>> frames;
+	std::vector<MButton*> buttons;
+	std::vector<Gtk::Frame*> frames;
 };
 
 
