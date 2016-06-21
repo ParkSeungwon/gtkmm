@@ -73,14 +73,20 @@ void MVBox::pack(const TimeTable& mb)
 	if(buttons.size() == 0) gab = mb.start - START*100;
 	else gab = mb.start - buttons.back()->get_end();
 	if(gab != 0) {
-		auto a = manage(new Frame());
+		auto a = new Frame();
 		a->set_size_request(50, RATIO * gab);
 		frames.push_back(a);
 		pack_start(*a, PACK_SHRINK);
 	}
-	auto a = manage(new MButton(mb));
+	auto a = new MButton(mb);
 	pack_start(*a, PACK_SHRINK);
 	buttons.push_back(a);
+}
+
+MVBox::~MVBox()
+{
+	for(auto& a : buttons) delete a;
+	for(auto& a : frames) delete a;
 }
 
 CommentPopup::CommentPopup() : ok("ok"), cancel("cancel")

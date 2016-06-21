@@ -66,6 +66,7 @@ class MVBox : public Gtk::VBox
 {
 public:
 	void pack(const TimeTable& mb);
+	virtual ~MVBox();
 	
 protected:
 	std::vector<MButton*> buttons;
