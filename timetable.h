@@ -2,7 +2,6 @@
 #include<gtkmm.h>
 #include<string>
 #include<vector>
-#include<memory>
 
 #define RATIO 1//table stretch rate
 #define START 10//table beginning time
@@ -52,24 +51,27 @@ public:
 	void set_label();
 
 protected:
-	std::pair<int,int> time();
-	int start, end, day;
-	std::string professor, subject, classroom;
-	void on_click();
+	CommentPopup popup;
 	Gtk::VBox vbox;
 	Gtk::Label label;
 	Gtk::Image image;
-	CommentPopup popup;
+
+	int start, end, day;
+	std::string professor, subject, classroom;
+	
+	std::pair<int,int> time();
+	void on_click() {popup.show();}
 };
 
 class MVBox : public Gtk::VBox
 {
 public:
+	virtual ~MVBox();
 	void pack(const TimeTable& mb);
 	
 protected:
-	std::vector<std::shared_ptr<MButton>> buttons;
-	std::vector<std::shared_ptr<Gtk::Frame>> frames;
+	std::vector<MButton*> buttons;
+	std::vector<Gtk::Frame*> frames;
 };
 
 
