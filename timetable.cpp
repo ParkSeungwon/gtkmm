@@ -34,11 +34,8 @@ void MButton::set_label()
 		s[pos] = '\n';
 	}
 	auto a = time();
-	if(a.first == day && a.second + 100 >start && a.second < end) {
+	if(a.first == day && a.second + 100 >start && a.second < end)
 		vbox.pack_start(image, PACK_SHRINK);
-		//s = "----\n" + s;
-		//set_image("bomber_hb.png");
-	}
 	if(popup.contents.size() > 1) s = "*\n" + s;
 	label.set_label(s);
 }
@@ -62,25 +59,25 @@ void MButton::set_comment()
 	popup.set_title(professor + '(' + classroom + ')');
 }
 
-void MButton::on_click()
-{
-	popup.show();
-}
-
 void MVBox::pack(const TimeTable& mb)
-{
-	int gab;
-	if(buttons.size() == 0) gab = mb.start - START*100;
-	else gab = mb.start - buttons.back()->get_end();
+{//pack one class
+	int gab = mb.start - (  buttons.size() == 0 ? //first class?
+							START * 100 : buttons.back()->get_end()  );
 	if(gab != 0) {
 		auto a = new Frame();
-		a->set_size_request(50, RATIO * gab);
 		frames.push_back(a);
+		a->set_size_request(50, RATIO * gab);
 		pack_start(*a, PACK_SHRINK);
 	}
 	auto a = new MButton(mb);
-	pack_start(*a, PACK_SHRINK);
 	buttons.push_back(a);
+	pack_start(*a, PACK_SHRINK);
+}
+
+MVBox::~MVBox()
+{
+	for(auto& a : frames) delete a;
+	for(auto& a : buttons) delete a;
 }
 
 MVBox::~MVBox()
@@ -122,15 +119,21 @@ void CommentPopup::on_ok_clicked()
 	hide();
 }
 
-pair<int, int> MButton::time() {
+pair<int, int> MButton::time()
+{//return current day & time in integer
 	auto now = system_clock::now();
 	auto tp = system_clock::to_time_t(now);
 	string t = ctime(&tp);
-	unordered_map<string, int> days {
-		{"Mon", 1}, {"Tue", 2}, {"Wed", 3}, {"Thu", 4}, {"Fri", 5}, {"Sat", 6},
-		{"Sun", 7}
-	};
-	return {days[t.substr(0, 3)], stoi(t.substr(11, 5).erase(2, 1))};
+	string d = t.substr(0, 3);
+	const char* day[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+	int i=0;
+	while(d != day[i]) i++; 
+	int h = stoi(t.substr(11, 5).erase(2, 1));
+	float minute = h % 100;
+	h -= minute;
+	minute *= 100.0 / 60.0;
+	h += minute;
+	return {i+1, h};
 }
 
 Win::Win(const TimeTable* tt)
