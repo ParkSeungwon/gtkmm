@@ -34,11 +34,8 @@ void MButton::set_label()
 		s[pos] = '\n';
 	}
 	auto a = time();
-	if(a.first == day && a.second + 100 >start && a.second < end) {
+	if(a.first == day && a.second + 100 >start && a.second < end)
 		vbox.pack_start(image, PACK_SHRINK);
-		//s = "----\n" + s;
-		//set_image("bomber_hb.png");
-	}
 	if(popup.contents.size() > 1) s = "*\n" + s;
 	label.set_label(s);
 }
