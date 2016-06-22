@@ -1,7 +1,6 @@
 #include<fstream>
 #include<chrono>
 #include<ctime>
-#include<unordered_map>
 #include"analogue_clock_01.xpm"
 #include"timetable.h"
 using namespace std;
@@ -29,13 +28,12 @@ MButton::MButton(const TimeTable& tt)
 void MButton::set_label()
 {//process subject label
 	string s = subject;
-	size_t pos;
-	while(( pos = s.find(' ', pos)) != string::npos) s[pos] = '\n';
-	auto a = time();
-	if(a.first == day && a.second + 100 > start && a.second < end)
-		vbox.pack_start(image, PACK_SHRINK);
+	for(size_t pos; (pos = s.find(' ')) != string::npos;) s[pos] = '\n';
 	if(popup.contents.size() > 1) s = "*\n" + s;
 	label.set_label(s);
+	auto a = time();
+	if(a.first == day && start < a.second + 100 && a.second < end)
+		vbox.pack_start(image, PACK_SHRINK);
 }
 
 void MButton::set_comment()
@@ -51,7 +49,7 @@ void MButton::set_comment()
 		getline(f, tmp);
 		str += tmp;
 		if(d == day && s == start) last = str;
-		str = "";
+		str.clear();// = "";
 	}
 	popup.prepare(day, start, last);
 	popup.set_title(professor + '(' + classroom + ')');
@@ -91,7 +89,7 @@ CommentPopup::CommentPopup() : ok("ok"), cancel("cancel")
 	hbox.pack_start(ok);
 	hbox.pack_start(cancel);
 	set_modal(true);
-	set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+	set_position(Gtk::WIN_POS_MOUSE);
 	show_all_children();
 }
 
@@ -144,10 +142,7 @@ Win::Win(const TimeTable* tt)
 		if(j == 0) label[i].set_label("12:00~\n1:00");
 		else label[i].set_label(to_string(j) + ":00 ~\n"+to_string(j+1) + ":00");
 	}
-	while(tt->day != 0) {
-		vbox[tt->day].pack(*tt);
-		tt++;
-	}
+	for(; tt->day != 0; tt++) vbox[tt->day].pack(*tt);
 	show_all_children();
 }
 

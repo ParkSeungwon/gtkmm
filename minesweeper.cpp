@@ -65,13 +65,14 @@ void Win::on_click(int n) {
 bool Win::time_pass() {//start time static으로 해야 
 	while(on) {
 		this_thread::sleep_for(chrono::seconds(1));
+//		set_title(to_string(++time).c_str());//buggy
 		cout << ++time << " seconds passed\r" << flush;
 	}
 	return true;
 }
 
 void Win::message(const char* str) {
-	MessageDialog dialog(*this, str, false, MESSAGE_QUESTION, BUTTONS_OK);
+	MessageDialog dialog(*this, str);
 	int x, y;
 	get_position(x, y);
 	dialog.move(x-170, y);
