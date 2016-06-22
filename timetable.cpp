@@ -29,12 +29,10 @@ MButton::MButton(const TimeTable& tt)
 void MButton::set_label()
 {//process subject label
 	string s = subject;
-	for(int pos=0; pos != string::npos; ) {//get_width() > 50) {
-		pos = s.find(' ', pos);
-		s[pos] = '\n';
-	}
+	size_t pos;
+	while(( pos = s.find(' ', pos)) != string::npos) s[pos] = '\n';
 	auto a = time();
-	if(a.first == day && a.second + 100 >start && a.second < end)
+	if(a.first == day && a.second + 100 > start && a.second < end)
 		vbox.pack_start(image, PACK_SHRINK);
 	if(popup.contents.size() > 1) s = "*\n" + s;
 	label.set_label(s);
@@ -145,7 +143,6 @@ Win::Win(const TimeTable* tt)
 		int j = (i + START) % 12;
 		if(j == 0) label[i].set_label("12:00~\n1:00");
 		else label[i].set_label(to_string(j) + ":00 ~\n"+to_string(j+1) + ":00");
-//		label[i].set_size_request(50, RATIO * 98);//frame need 2 pixel more
 	}
 	while(tt->day != 0) {
 		vbox[tt->day].pack(*tt);

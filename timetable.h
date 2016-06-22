@@ -74,8 +74,6 @@ protected:
 	std::vector<Gtk::Frame*> frames;
 };
 
-
-
 class Win : public Gtk::Window
 {
 public:
