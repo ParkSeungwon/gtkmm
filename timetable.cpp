@@ -76,12 +76,6 @@ void MVBox::pack(const TimeTable& mb)
 
 MVBox::~MVBox()
 {
-	for(auto& a : frames) delete a;
-	for(auto& a : buttons) delete a;
-}
-
-MVBox::~MVBox()
-{
 	for(auto& a : buttons) delete a;
 	for(auto& a : frames) delete a;
 }

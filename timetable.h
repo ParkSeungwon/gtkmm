@@ -66,7 +66,6 @@ protected:
 class MVBox : public Gtk::VBox
 {
 public:
-	virtual ~MVBox();
 	void pack(const TimeTable& mb);
 	virtual ~MVBox();
 	
