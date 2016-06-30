@@ -26,14 +26,12 @@ protected:
 	void on_click(int);
 
 private:
-	std::mutex mtx;
-	std::thread th;
-	bool on = true;
 	int time = 0;
+	sigc::connection conn;
 	int bomb;
 
 	bool time_pass();
-	void message(const char* str);
+	void message(std::string str);
 	int mine_count(int x, int y);
 	void dig(int n);
 	void domino(int x, int y);

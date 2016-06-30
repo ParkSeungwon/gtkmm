@@ -24,9 +24,13 @@ bool MButton::on_button_press_event(GdkEventButton* e)
 	return true;
 }
 
-Win::Win(int w, int h) : Matrix<char>(w, h), th(&Win::time_pass, this) {
+Win::Win(int w, int h) : Matrix<char>(w, h) {
 	add(grid);
 	grid.set_row_homogeneous(true);
+	auto slot =	sigc::mem_fun(*this, &Win::time_pass);//bool
+	//auto slot =	bind(&Win::time_pass, this);//Glib does not have compatibilty 
+	//with bind
+	conn = Glib::signal_timeout().connect_seconds(slot, 1);//buggy
 	grid.set_column_homogeneous(true);
 	bomb = w * h / 6;
 	vector<int> v;
@@ -46,10 +50,7 @@ Win::Win(int w, int h) : Matrix<char>(w, h), th(&Win::time_pass, this) {
 }
 
 Win::~Win() { //virtual->on=false ...
-	on = false;
 	delete [] btn;
-	show_bestscore();
-	th.join();
 }
 
 void Win::on_click(int n) {
@@ -57,28 +58,28 @@ void Win::on_click(int n) {
 	else if(arr[n] == '*') {
 		btn[n].set_label("*");
 		for(int i=0; i<width*height; i++) if(arr[i] == 42) btn[i].set_label("*");
-		message(("Boom!!!\n" + show_bestscore()).c_str());
+		message("Boom!!!\n" + show_bestscore());
 		hide();
 	} else dig(n);
 }
 
 bool Win::time_pass() {//start time static으로 해야 
-	while(on) {
-		this_thread::sleep_for(chrono::seconds(1));
-		mtx.lock();
-		set_title(to_string(++time) + " sec passed");//buggy
-		mtx.unlock();
-		//cout << ++time << " seconds passed\r" << flush;
-	}
+	set_title(to_string(++time) + " sec passed");
+//	while(on) {
+//		this_thread::sleep_for(chrono::seconds(1));
+		//mtx.lock();
+		//mtx.unlock();
+//		cout << ++time << " seconds passed\r" << flush;
+//	}
 	return true;
 }
 
-void Win::message(const char* str) {
-	MessageDialog dialog(*this, str);
+void Win::message(string str) {
+	MessageDialog dialog(*this, str.c_str());
 	int x, y;
 	get_position(x, y);
 	dialog.move(x-170, y);
-	on = false;
+	conn.disconnect();
 	dialog.run();
 }
 
@@ -105,7 +106,7 @@ void Win::dig(int n) {
 		dug++;
 		if(dug == width*height-bomb) {
 			write_score();
-			message(("Complete!!!\n" + show_bestscore()).c_str());
+			message("Complete!!!\n" + show_bestscore());
 		}
 	}
 }
