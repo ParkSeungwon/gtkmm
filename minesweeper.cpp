@@ -57,7 +57,7 @@ void Win::on_click(int n) {
 	else if(arr[n] == '*') {
 		btn[n].set_label("*");
 		for(int i=0; i<width*height; i++) if(arr[i] == 42) btn[i].set_label("*");
-		message("Boom!!!");
+		message(("Boom!!!\n" + show_bestscore()).c_str());
 		hide();
 	} else dig(n);
 }
@@ -65,8 +65,10 @@ void Win::on_click(int n) {
 bool Win::time_pass() {//start time static으로 해야 
 	while(on) {
 		this_thread::sleep_for(chrono::seconds(1));
-//		set_title(to_string(++time).c_str());//buggy
-		cout << ++time << " seconds passed\r" << flush;
+		mtx.lock();
+		set_title(to_string(++time) + " sec passed");//buggy
+		mtx.unlock();
+		//cout << ++time << " seconds passed\r" << flush;
 	}
 	return true;
 }
@@ -102,14 +104,15 @@ void Win::dig(int n) {
 		btn[n].set_sensitive(false);
 		dug++;
 		if(dug == width*height-bomb) {
-			message("Complete!!!");
 			write_score();
+			message(("Complete!!!\n" + show_bestscore()).c_str());
 		}
 	}
 }
 
-void Win::show_bestscore() 
+string Win::show_bestscore() 
 {
+	string rt;
 	ifstream file("bestscore.txt");
 	if(file.is_open()) {
 		vector<int> v;
@@ -118,13 +121,14 @@ void Win::show_bestscore()
 			if(n[0] == width && n[1] == height) v.push_back(n[2]);
 
 		sort(v.begin(), v.end());
-		cout << "\nbest scores of " << width << 'X' << height << endl;
+		rt = "\nbest scores of " + to_string(width) + 'X' + to_string(height) + '\n';
 		int i=1;
 		for(auto& a : v) {
-			cout << i++ << ". " << a << endl;
+			rt += to_string(i++) + ". " + to_string(a) + '\n';
 			if(i>10) break;
 		}
 	}
+	return rt;
 }
 
 void Win::write_score() 

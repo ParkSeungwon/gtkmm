@@ -1,6 +1,7 @@
 #pragma once
 #include<gtkmm.h>
 #include<thread>
+#include<mutex>
 #include<chrono>
 #include"matrix.h"
 class MButton : public Gtk::Button
@@ -25,6 +26,7 @@ protected:
 	void on_click(int);
 
 private:
+	std::mutex mtx;
 	std::thread th;
 	bool on = true;
 	int time = 0;
@@ -35,6 +37,6 @@ private:
 	int mine_count(int x, int y);
 	void dig(int n);
 	void domino(int x, int y);
-	void show_bestscore();
+	std::string show_bestscore();
 	void write_score();
 };

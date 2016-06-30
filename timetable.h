@@ -61,6 +61,9 @@ protected:
 	
 	std::pair<int,int> time();
 	void on_click() {popup.show();}
+
+private:
+	std::string utf8chr(int cp);
 };
 
 class MVBox : public Gtk::VBox

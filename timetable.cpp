@@ -30,10 +30,12 @@ void MButton::set_label()
 	string s = subject;
 	for(size_t pos; (pos = s.find(' ')) != string::npos;) s[pos] = '\n';
 	if(popup.contents.size() > 1) s = "*\n" + s;
-	label.set_label(s);
 	auto a = time();
-	if(a.first == day && start < a.second + 100 && a.second < end)
-		vbox.pack_start(image, PACK_SHRINK);
+	if(a.first == day && start < a.second + 100 && a.second < end) {
+		//vbox.pack_start(image, PACK_SHRINK);
+		s = utf8chr(0x23f0) + (s[0] == '*' ? ' ' : '\n') + s;
+	}
+	label.set_label(s);
 }
 
 void MButton::set_comment()
@@ -146,6 +148,16 @@ Win::Win(const TimeTable* tt)
 	show_all_children();
 }
 
+string MButton::utf8chr(int cp)
+{
+	char c[5]={ 0x00,0x00,0x00,0x00,0x00 };
+	if     (cp<=0x7F) { c[0] = cp;  }
+	else if(cp<=0x7FF) { c[0] = (cp>>6)+192; c[1] = (cp&63)+128; }
+	else if(0xd800<=cp && cp<=0xdfff) {} //invalid block of utf8
+	else if(cp<=0xFFFF) { c[0] = (cp>>12)+224; c[1]= ((cp>>6)&63)+128; c[2]=(cp&63)+128; }
+	else if(cp<=0x10FFFF) { c[0] = (cp>>18)+240; c[1] = ((cp>>12)&63)+128; c[2] = ((cp>>6)&63)+128; c[3]=(cp&63)+128; }
+	return string(c);
+}
 
 
 int main(int argc, char** argv)
