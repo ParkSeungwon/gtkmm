@@ -8,8 +8,11 @@ class MButton : public Gtk::Button
 {
 public:
 	MButton();
+	void set_label(std::string str) { label.set_markup(str); }
+	std::string get_label() { return label.get_label(); }
 	
 protected:
+	Gtk::Label label;
 	bool on_button_press_event(GdkEventButton* e);
 };
 

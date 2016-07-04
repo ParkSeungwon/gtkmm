@@ -1,14 +1,13 @@
+#include<iostream>
 #include<fstream>
 #include<chrono>
 #include<ctime>
-#include"analogue_clock_01.xpm"
 #include"timetable.h"
 using namespace std;
 using namespace chrono;
 using namespace Gtk;
-//Image MButton::image("alarm.png");
+
 MButton::MButton(const TimeTable& tt) 
-	: image(Gdk::Pixbuf::create_from_xpm_data(analogue_clock_01_xpm))
 {
 	start = tt.start;
 	end = tt.end;
@@ -17,12 +16,9 @@ MButton::MButton(const TimeTable& tt)
 	subject = tt.subject;
 	classroom = tt.classroom;
 	set_size_request(50, RATIO*(end - start));
-	//set_line_wrap(true);
 	signal_clicked().connect(bind(&MButton::on_click, this));
 	set_comment();
 	set_label();
-	add(vbox);
-	vbox.pack_end(label);
 }
 
 void MButton::set_label()
@@ -32,29 +28,40 @@ void MButton::set_label()
 	if(popup.contents.size() > 1) s = "*\n" + s;
 	auto a = time();
 	if(a.first == day && start < a.second + 100 && a.second < end) {
-		//vbox.pack_start(image, PACK_SHRINK);
 		s = utf8chr(0x23f0) + (s[0] == '*' ? ' ' : '\n') + s;
 	}
-	label.set_label(s);
+	Button::set_label(s);
 }
 
 void MButton::set_comment()
 {//read notices
 	ifstream f("note.txt");
 	int d, s, n;
-	string str, last, tmp;
-	while(f >> d >> s >> n){ 
-		while(--n > 0) {
-			getline(f, tmp);
-			str += tmp + '\n';
+	string last, tmp;
+	char ch;
+	while(f >> skipws >> d >> s >> n >> noskipws >> ch){
+		for(int ln = 0; ln < n; ){
+			f >> noskipws >> ch;
+			tmp += ch;
+			if(ch == '\n') ln++;
 		}
-		getline(f, tmp);
-		str += tmp;
-		if(d == day && s == start) last = str;
-		str.clear();// = "";
+		if(d == day && s == start) last = tmp;
+		tmp.clear();// = "";
 	}
+	if(last.back() == '\n') last.erase(last.size()-1, 1);
 	popup.prepare(day, start, last);
 	popup.set_title(professor + '(' + classroom + ')');
+}
+
+void CommentPopup::on_ok_clicked()
+{
+	ofstream f("note.txt", ofstream::app);
+	string s = textview.get_buffer()->get_text();
+	if(s.back() != '\n') s += '\n';
+
+	f << day << ' ' << start << ' ' << count(s.begin(), s.end(), '\n');
+	f << '\n' << s;
+	hide();
 }
 
 void MVBox::pack(const TimeTable& mb)
@@ -100,15 +107,6 @@ void CommentPopup::prepare(int d, int s, string contents)
 	day = d; start = s;
 	this->contents = contents;
 	textview.get_buffer()->set_text(contents);
-}
-
-void CommentPopup::on_ok_clicked()
-{
-	ofstream f("note.txt", ofstream::app);
-	string s = textview.get_buffer()->get_text();
-	f << day << ' ' << start << ' ' << textview.get_buffer()->get_line_count();
-	f << ' ' << textview.get_buffer()->get_text() << endl;
-	hide();
 }
 
 pair<int, int> MButton::time()

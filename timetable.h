@@ -52,9 +52,6 @@ public:
 
 protected:
 	CommentPopup popup;
-	Gtk::VBox vbox;
-	Gtk::Label label;
-	Gtk::Image image;
 
 	int start, end, day;
 	std::string professor, subject, classroom;

@@ -12,6 +12,7 @@ using namespace chrono;
 MButton::MButton() 
 {
 	add_events(Gdk::BUTTON_PRESS_MASK);
+	add(label);
 }
 
 bool MButton::on_button_press_event(GdkEventButton* e) 
@@ -56,8 +57,13 @@ Win::~Win() { //virtual->on=false ...
 void Win::on_click(int n) {
 	if(arr[n] == 0) domino(n%width, n/width);
 	else if(arr[n] == '*') {
-		btn[n].set_label("*");
-		for(int i=0; i<width*height; i++) if(arr[i] == 42) btn[i].set_label("*");
+		for(int i=0; i<width*height; i++) {
+			if(arr[i] != 42) {
+				if(btn[i].get_label() == "v") 
+					btn[i].set_label("<span foreground=\"red\">v</span>");
+			} else btn[i].set_label("*");
+		}
+		btn[n].set_label("<span foreground=\"red\">*</span>");
 		message("Boom!!!\n" + show_bestscore());
 		hide();
 	} else dig(n);
@@ -77,8 +83,8 @@ bool Win::time_pass() {//start time static으로 해야
 void Win::message(string str) {
 	MessageDialog dialog(*this, str.c_str());
 	int x, y;
-	get_position(x, y);
-	dialog.move(x-170, y);
+	//get_position(x, y);
+	//dialog.move(x-170, y);
 	conn.disconnect();
 	dialog.run();
 }
