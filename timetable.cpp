@@ -39,9 +39,9 @@ void MButton::set_comment()
 	int d, s, n;
 	string last, tmp;
 	char ch;
-	while(f >> skipws >> d >> s >> n >> noskipws >> ch){
+	while(f >> skipws >> d >> s >> n >> noskipws >> ch) {
 		for(int ln = 0; ln < n; ){
-			f >> noskipws >> ch;
+			f >> ch;
 			tmp += ch;
 			if(ch == '\n') ln++;
 		}
