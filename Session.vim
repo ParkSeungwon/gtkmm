@@ -19,7 +19,8 @@ badd +7 ~/Programming/small_programs/ascii.cc
 badd +23 ~/Programming/small_programs/card.h
 badd +1 ~/Programming/gtkmm/timetable.cpp
 badd +1 ~/Programming/gtkmm/timetable.h
-badd +0 ~/Programming/gtkmm/test.cpp
+badd +1 ~/Programming/gtkmm/test.cpp
+badd +0 ~/Programming/gtkmm/draw.cpp
 argglobal
 silent! argdel *
 set stal=2
@@ -132,8 +133,30 @@ if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 10
-normal! 045|
-tabnext 5
+normal! 018|
+tabedit ~/Programming/gtkmm/draw.cpp
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
+tabnext 6
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

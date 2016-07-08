@@ -15,7 +15,7 @@ all : $(OBJ) $(GOBJ) $(EXE)
 	$(CC) $< -o $@ $(OBJ) $(GOBJ) $(CFLAG) $(GTKCFLAG) $(GTKLIB)
 
 %.o : %.cc %.h
-	$(CC) $< -c $(CFLAG)
+	$(CC) $< -c $(CFLAG) $(GTKCFLAG)
 
 %.o : %.c++ %.h
 	$(CC) $< -c $(CFLAG) $(GTKCFLAG)

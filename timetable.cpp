@@ -48,7 +48,7 @@ void MButton::set_comment()
 		if(d == day && s == start) last = tmp;
 		tmp.clear();// = "";
 	}
-	if(last.back() == '\n') last.erase(last.size()-1, 1);
+	if(last.back() == '\n') last.pop_back();
 	popup.prepare(day, start, last);
 	popup.set_title(professor + '(' + classroom + ')');
 }
