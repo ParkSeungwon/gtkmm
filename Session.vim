@@ -20,7 +20,8 @@ badd +23 ~/Programming/small_programs/card.h
 badd +1 ~/Programming/gtkmm/timetable.cpp
 badd +1 ~/Programming/gtkmm/timetable.h
 badd +1 ~/Programming/gtkmm/test.cpp
-badd +0 ~/Programming/gtkmm/draw.cpp
+badd +1 ~/Programming/gtkmm/draw.cpp
+badd +0 ~/Programming/gtkmm/timetable2.h
 argglobal
 silent! argdel *
 set stal=2
@@ -90,7 +91,7 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabedit ~/Programming/gtkmm/timetable.h
+tabedit ~/Programming/gtkmm/timetable2.h
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -156,7 +157,7 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabnext 6
+tabnext 4
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

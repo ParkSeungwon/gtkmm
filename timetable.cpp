@@ -2,7 +2,7 @@
 #include<fstream>
 #include<chrono>
 #include<ctime>
-#include"timetable.h"
+#include"timetable2.h"
 using namespace std;
 using namespace chrono;
 using namespace Gtk;
@@ -25,7 +25,7 @@ void MButton::set_label()
 {//process subject label
 	string s = subject;
 	for(size_t pos; (pos = s.find(' ')) != string::npos;) s[pos] = '\n';
-	if(popup.contents.size() > 1) s = "*\n" + s;
+	if(popup.contents.size() > 0) s = "*\n" + s;
 	auto a = time();
 	if(a.first == day && start < a.second + 100 && a.second < end) {
 		s = utf8chr(0x23f0) + (s[0] == '*' ? ' ' : '\n') + s;
@@ -35,7 +35,7 @@ void MButton::set_label()
 
 void MButton::set_comment()
 {//read notices
-	ifstream f("note.txt");
+	ifstream f("/home/zezeon/Programming/gtkmm/note.txt");
 	int d, s, n;
 	string last, tmp;
 	char ch;

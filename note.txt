@@ -26,3 +26,13 @@ fasfasdfsd
 2 1450 2
 daffafasdf
 fasfasdfsd
+1 1500 1
+1
+1 1500 1
+1.
+1 1500 1
+1
+1 1000 1
+2
+1 1000 1
+
