@@ -7,14 +7,18 @@ class Win : public Window
 {
 public:
 	Win(const char* filename) : image(filename) {
-		add(image);
-		cout << "image size " << image.get_pixbuf()->get_width() << 'X';
-		cout << image.get_pixbuf()->get_height() << endl;
+		add(swin);
+		swin.add(image);
+		int w = image.get_pixbuf()->get_width();
+		int h = image.get_pixbuf()->get_height();
+		cout << "image size " << w << 'X' << h << endl;
+		set_default_size(w + 20, h + 20);
 		show_all_children();
 	}
 		
 protected:
 	Image image;
+	ScrolledWindow swin;
 };
 
 int main(int c, char** v)
