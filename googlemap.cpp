@@ -7,9 +7,14 @@ Winmain::Winmain()
 {
 	auto webview = WEBKIT_WEB_VIEW(webkit_web_view_new());
 	add(*Glib::wrap(GTK_WIDGET(webview)));
-	string content = googlemap({{37.325630, 129.017094}, {37.3511, 129.600}});
+	string content = googlemap({{37.112206, 128.924017},
+			{37.097790, 128.914983},
+			{37.163722, 128.917627},
+			{37.218231, 128.962182},
+			{37.310797, 129.011924},
+			{37.325828, 129.017115}});
 	webkit_web_view_load_html(webview, content.c_str(), "");
-	set_default_size(620, 420);
+	set_default_size(1024, 768);
 	show_all_children();
 }
 
@@ -38,8 +43,12 @@ string Winmain::googlemap(vector<pair<float, float>> pts)
 	ad += ";var flightPath=new google.maps.Polyline({"
 		"path:trip, strokeColor:'#0000FF', strokeOpacity:0.8, strokeWeight:2 });"
 		"flightPath.setMap(map);";
+	ad += "var bound = new google.maps.LatLngBounds();";
+	for(int j=0; j<i; j++) ad += "bound.extend(d" + to_string(j) + ");";
+	ad += "map.fitBounds(bound);";
+//		"new google.maps.Rectangle({ bounds: bound, map: map, fillColor: '#000000', fillOpacity: 0.2, strokeWeight: 0 });";
 
-	string rt = googlemap((minx+maxx)/2, (miny+maxy)/2, 12, 600, 400, ad);
+	string rt = googlemap((minx+maxx)/2, (miny+maxy)/2, 12, 1000, 740, ad);
 	return rt;
 }
 
