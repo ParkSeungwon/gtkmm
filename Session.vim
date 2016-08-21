@@ -21,7 +21,10 @@ badd +1 ~/Programming/gtkmm/timetable.cpp
 badd +1 ~/Programming/gtkmm/timetable.h
 badd +1 ~/Programming/gtkmm/test.cpp
 badd +1 ~/Programming/gtkmm/draw.cpp
-badd +0 ~/Programming/gtkmm/timetable2.h
+badd +1 ~/Programming/gtkmm/timetable2.h
+badd +0 ~/Programming/gtkmm/googlemap.cpp
+badd +0 ~/Programming/gtkmm/googlemap.h
+badd +0 ~/Programming/gtkmm/image.cpp
 argglobal
 silent! argdel *
 set stal=2
@@ -157,7 +160,73 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabnext 4
+tabedit ~/Programming/gtkmm/googlemap.cpp
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 22 - ((21 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+22
+normal! 06|
+tabedit ~/Programming/gtkmm/googlemap.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 2 - ((1 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+2
+normal! 016|
+tabedit ~/Programming/gtkmm/image.cpp
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 31 - ((30 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+31
+normal! 0
+tabnext 7
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
