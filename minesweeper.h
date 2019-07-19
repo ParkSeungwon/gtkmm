@@ -4,6 +4,8 @@
 #include<mutex>
 #include<chrono>
 #include"matrix.h"
+
+int flag = 0;
 class MButton : public Gtk::Button
 {
 public:

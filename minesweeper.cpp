@@ -18,8 +18,13 @@ MButton::MButton()
 bool MButton::on_button_press_event(GdkEventButton* e) 
 {
 	if(e->type == GDK_BUTTON_PRESS && e->button == 3) {
-		if(get_label() == "v") set_label("");
-		else if (get_label() == "") set_label("v");
+		if(get_label() == "v") {
+			set_label("");
+			flag--;
+		} else if (get_label() == "") {
+			set_label("v");
+			flag++;
+		}
 	} else if(get_label()!="v" && e->type==GDK_BUTTON_PRESS && e->button==1) 
 		clicked();
 	return true;
@@ -70,7 +75,7 @@ void Win::on_click(int n) {
 }
 
 bool Win::time_pass() {//start time static으로 해야 
-	set_title(to_string(++time) + " sec passed");
+	set_title(to_string(++time) + " sec passed, flag = " + to_string(flag));
 //	while(on) {
 //		this_thread::sleep_for(chrono::seconds(1));
 		//mtx.lock();
